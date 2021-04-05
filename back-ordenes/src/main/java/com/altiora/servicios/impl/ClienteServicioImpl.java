@@ -29,13 +29,13 @@ public class ClienteServicioImpl implements ClienteServicio {
 	}
 
 	@Override
-	public void guardar(Cliente cliente) {
-		clienteRepositorio.save(cliente);
+	public Cliente guardar(Cliente cliente) {
+		return clienteRepositorio.save(cliente);
 	}
 
 	@Override
-	public void eliminar(Cliente cliente) {
-		clienteRepositorio.delete(cliente);
+	public void eliminar(Integer clienteId) {
+		clienteRepositorio.deleteById(clienteId);
 	}
 
 	

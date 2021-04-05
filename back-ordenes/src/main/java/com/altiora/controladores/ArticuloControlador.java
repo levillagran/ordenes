@@ -14,39 +14,39 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.altiora.entidades.Cliente;
-import com.altiora.servicios.ClienteServicio;
+import com.altiora.entidades.Articulo;
+import com.altiora.servicios.ArticuloServicio;
 
 @RestController
-@RequestMapping(path = "/cliente")
-public class ClienteControlador {
+@RequestMapping(path = "/articulo")
+public class ArticuloControlador {
 
 	@Autowired
-	@Qualifier("clienteServicio")
-	private ClienteServicio clienteServicio;
+	@Qualifier("articuloServicio")
+	private ArticuloServicio articuloServicio;
 
 	@GetMapping("/listar")
-	public List<Cliente> listar() {
-		return clienteServicio.listar();
+	public List<Articulo> listar() {
+		return articuloServicio.listar();
 	}
 	
 	@GetMapping("/obtener/{id}")
-	public Cliente obtener(@PathVariable Integer id) {
-		return clienteServicio.obtener(id);
+	public Articulo obtener(@PathVariable Integer id) {
+		return articuloServicio.obtener(id);
 	}
 	
 	@PostMapping("/guardar")
-	public Cliente nuevoCliente(@RequestBody Cliente cliente) {
-	    return clienteServicio.guardar(cliente);
+	public Articulo nuevoCliente(@RequestBody Articulo articulo) {
+	    return articuloServicio.guardar(articulo);
 	}
 	
 	@PutMapping("/actualizar")
-	public Cliente actualizar(@RequestBody Cliente cliente) {
-		return clienteServicio.guardar(cliente);
+	public Articulo actualizar(@RequestBody Articulo articulo) {
+		return articuloServicio.guardar(articulo);
 	}
 	
 	@DeleteMapping("/eliminar/{id}")
 	public void eliminar(@PathVariable Integer id) {
-		clienteServicio.eliminar(id);
+		articuloServicio.eliminar(id);
 	  }
 	}

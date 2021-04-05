@@ -29,13 +29,13 @@ public class ArticuloServicioImpl implements ArticuloServicio {
 	}
 
 	@Override
-	public void guardar(Articulo articulo) {
-		articuloRepositorio.save(articulo);
+	public Articulo guardar(Articulo articulo) {
+		return articuloRepositorio.save(articulo);
 	}
 
 	@Override
-	public void eliminar(Articulo articulo) {
-		articuloRepositorio.delete(articulo);
+	public void eliminar(Integer articuloId) {
+		articuloRepositorio.deleteById(articuloId);
 	}
 
 	
