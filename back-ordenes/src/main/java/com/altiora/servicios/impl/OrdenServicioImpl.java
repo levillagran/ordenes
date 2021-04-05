@@ -29,13 +29,13 @@ public class OrdenServicioImpl implements OrdenServicio {
 	}
 
 	@Override
-	public void guardar(Orden orden) {
-		ordenRepositorio.save(orden);
+	public Orden guardar(Orden orden) {
+		return ordenRepositorio.save(orden);
 	}
 
 	@Override
-	public void eliminar(Orden orden) {
-		ordenRepositorio.delete(orden);
+	public void eliminar(Integer ordenId) {
+		ordenRepositorio.deleteById(ordenId);
 	}
 
 	
