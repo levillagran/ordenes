@@ -1,14 +1,15 @@
 package com.altiora.entidades;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -35,12 +36,11 @@ public class Cliente implements Serializable {
 	@Column(name = "apellido")
 	private String apellido;
 	
-	@JoinColumn(name = "orden_id", referencedColumnName = "orden_id")
-    @ManyToOne
-    @JsonIgnore
-    private Orden orden;
-	
-	public Integer getCliente_id() {
+	@OneToMany(mappedBy = "cliente_id", fetch = FetchType.EAGER)
+	@JsonIgnore
+	private List<Orden> ordenList;
+		
+	public Integer getClienteId() {
 		return cliente_id;
 	}
 
@@ -64,12 +64,12 @@ public class Cliente implements Serializable {
 		this.apellido = apellido;
 	}
 
-	public Orden getOrden() {
-		return orden;
+	public List<Orden> getOrdenList() {
+		return ordenList;
 	}
 
-	public void setOrden(Orden orden) {
-		this.orden = orden;
+	public void setOrdenList(List<Orden> ordenList) {
+		this.ordenList = ordenList;
 	}
 
 	public static long getSerialversionuid() {
@@ -77,12 +77,19 @@ public class Cliente implements Serializable {
 	}
 
 	public Cliente(@NotNull Integer cliente_id, @Size(max = 50) String nombre, @Size(max = 50) String apellido,
-			Orden orden) {
+			List<Orden> ordenList) {
 		super();
 		this.cliente_id = cliente_id;
 		this.nombre = nombre;
 		this.apellido = apellido;
-		this.orden = orden;
+		this.ordenList = ordenList;
+	}
+
+	public Cliente(@NotNull Integer cliente_id, @Size(max = 50) String nombre, @Size(max = 50) String apellido) {
+		super();
+		this.cliente_id = cliente_id;
+		this.nombre = nombre;
+		this.apellido = apellido;
 	}
 
 	public Cliente() {

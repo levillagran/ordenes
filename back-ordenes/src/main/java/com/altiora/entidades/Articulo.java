@@ -1,14 +1,15 @@
 package com.altiora.entidades;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -36,13 +37,12 @@ public class Articulo implements Serializable {
 	private String nombre;
 
 	@Size(max = 50)
-	@Column(name = "precio")
-	private String precio;
-
-	@JoinColumn(name = "orden_id", referencedColumnName = "orden_id")
-    @ManyToOne
-    @JsonIgnore
-    private Orden orden;
+	@Column(name = "precio_unitario")
+	private String precio_unitario;
+	
+	@OneToMany(mappedBy = "articulo_id", fetch = FetchType.EAGER)
+	@JsonIgnore
+	private List<OrdenDetalle> ordenDetalleList;
 	
 	public Integer getArticulo_id() {
 		return articulo_id;
@@ -68,20 +68,20 @@ public class Articulo implements Serializable {
 		this.nombre = nombre;
 	}
 
-	public String getPrecio() {
-		return precio;
+	public String getPrecio_unitario() {
+		return precio_unitario;
 	}
 
-	public void setPrecio(String precio) {
-		this.precio = precio;
+	public void setPrecio_unitario(String precio_unitario) {
+		this.precio_unitario = precio_unitario;
 	}
 
-	public Orden getOrden() {
-		return orden;
+	public List<OrdenDetalle> getOrdenDetalleList() {
+		return ordenDetalleList;
 	}
 
-	public void setOrden(Orden orden) {
-		this.orden = orden;
+	public void setOrdenDetalleList(List<OrdenDetalle> ordenDetalleList) {
+		this.ordenDetalleList = ordenDetalleList;
 	}
 
 	public static long getSerialversionuid() {
@@ -89,15 +89,25 @@ public class Articulo implements Serializable {
 	}
 
 	public Articulo(@NotNull Integer articulo_id, @Size(max = 50) String codigo, @Size(max = 50) String nombre,
-			@Size(max = 50) String precio, Orden orden) {
+			@Size(max = 50) String precio_unitario, List<OrdenDetalle> ordenDetalleList) {
 		super();
 		this.articulo_id = articulo_id;
 		this.codigo = codigo;
 		this.nombre = nombre;
-		this.precio = precio;
-		this.orden = orden;
+		this.precio_unitario = precio_unitario;
+		this.ordenDetalleList = ordenDetalleList;
 	}
-public Articulo() {
+
+	public Articulo(@NotNull Integer articulo_id, @Size(max = 50) String codigo, @Size(max = 50) String nombre,
+			@Size(max = 50) String precio_unitario) {
+		super();
+		this.articulo_id = articulo_id;
+		this.codigo = codigo;
+		this.nombre = nombre;
+		this.precio_unitario = precio_unitario;
+	}
+
+	public Articulo() {
 	}
 	
 }
