@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.altiora.entidades.Orden;
+import com.altiora.repositorios.ClienteRepositorio;
 import com.altiora.repositorios.OrdenRepositorio;
 import com.altiora.servicios.OrdenServicio;
 
@@ -17,6 +18,10 @@ public class OrdenServicioImpl implements OrdenServicio {
 	@Autowired
 	@Qualifier("ordenRepositorio")
 	private OrdenRepositorio ordenRepositorio;
+	
+	@Autowired
+	@Qualifier("clienteRepositorio")
+	private ClienteRepositorio clienteRepositorio;
 
 	@Override
 	public List<Orden> listar() {
