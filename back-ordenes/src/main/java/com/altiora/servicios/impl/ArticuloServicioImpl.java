@@ -38,5 +38,18 @@ public class ArticuloServicioImpl implements ArticuloServicio {
 		articuloRepositorio.deleteById(articuloId);
 	}
 
+	@Override
+	public Articulo disStock(Integer articuloId,  int cantidad) {
+		Articulo articulo = new Articulo();
+		articulo = articuloRepositorio.findById(articuloId).get();
+		
+		if (articulo.getStock() > 0 && articulo.getStock() >cantidad) {
+			articulo.setStock(articulo.getStock()-cantidad);
+			return articuloRepositorio.save(articulo);
+		} else {
+			return null;
+		}	
+	}
+
 	
 }

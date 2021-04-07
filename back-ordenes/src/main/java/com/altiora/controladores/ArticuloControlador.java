@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.altiora.entidades.Articulo;
+import com.altiora.modelos.Stock;
 import com.altiora.servicios.ArticuloServicio;
 
 @RestController
@@ -48,5 +49,18 @@ public class ArticuloControlador {
 	@DeleteMapping("/eliminar/{id}")
 	public void eliminar(@PathVariable Integer id) {
 		articuloServicio.eliminar(id);
-	  }
 	}
+	
+	@PostMapping("/stock")
+	public Articulo nuevoCliente(@RequestBody Stock stock) {
+		Articulo articulo = new Articulo();
+		articulo = articuloServicio.disStock(stock.getArticulo().getArticulo_id(), stock.getCantidad());
+		if ( articulo != null) {
+			return articulo;
+		} else {
+			return null;
+		}
+		
+	}
+
+}

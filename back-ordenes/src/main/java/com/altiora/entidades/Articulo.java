@@ -40,10 +40,22 @@ public class Articulo implements Serializable {
 	@Column(name = "precio_unitario")
 	private String precio_unitario;
 	
+	@Size(max = 50)
+	@Column(name = "stock")
+	private Integer stock;
+	
 	@OneToMany(mappedBy = "articulo_id", fetch = FetchType.EAGER)
 	@JsonIgnore
 	private List<OrdenDetalle> ordenDetalleList;
 	
+	public Integer getStock() {
+		return stock;
+	}
+
+	public void setStock(Integer stock) {
+		this.stock = stock;
+	}
+
 	public Integer getArticulo_id() {
 		return articulo_id;
 	}
@@ -86,25 +98,27 @@ public class Articulo implements Serializable {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
-	}
+	}	
 
 	public Articulo(@NotNull Integer articulo_id, @Size(max = 50) String codigo, @Size(max = 50) String nombre,
-			@Size(max = 50) String precio_unitario, List<OrdenDetalle> ordenDetalleList) {
+			@Size(max = 50) String precio_unitario, @Size(max = 50) Integer stock) {
 		super();
 		this.articulo_id = articulo_id;
 		this.codigo = codigo;
 		this.nombre = nombre;
 		this.precio_unitario = precio_unitario;
+		this.stock = stock;
+	}
+
+	public Articulo(@NotNull Integer articulo_id, @Size(max = 50) String codigo, @Size(max = 50) String nombre,
+			@Size(max = 50) String precio_unitario, @Size(max = 50) Integer stock, List<OrdenDetalle> ordenDetalleList) {
+		super();
+		this.articulo_id = articulo_id;
+		this.codigo = codigo;
+		this.nombre = nombre;
+		this.precio_unitario = precio_unitario;
+		this.stock = stock;
 		this.ordenDetalleList = ordenDetalleList;
-	}
-
-	public Articulo(@NotNull Integer articulo_id, @Size(max = 50) String codigo, @Size(max = 50) String nombre,
-			@Size(max = 50) String precio_unitario) {
-		super();
-		this.articulo_id = articulo_id;
-		this.codigo = codigo;
-		this.nombre = nombre;
-		this.precio_unitario = precio_unitario;
 	}
 
 	public Articulo() {

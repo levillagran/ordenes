@@ -9,4 +9,5 @@ public interface ArticuloServicio {
 	public abstract Articulo obtener(Integer articuloId);
 	public abstract Articulo guardar(Articulo articulo);
 	public abstract void eliminar(Integer articuloId);
+	public abstract Articulo disStock(Integer articuloId, int cantidad);
 }
