@@ -474,7 +474,7 @@ class ClienteComponent extends Component {
                             <td> Codigo</td>
                             <td> Nombre</td>
                             <td> Precio Unitario</td>
-                            <td> cantidad</td>
+                            <td> Stock</td>
                         </tr>
                         </thead>
             
