@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +19,7 @@ import com.altiora.entidades.Articulo;
 import com.altiora.modelos.Stock;
 import com.altiora.servicios.ArticuloServicio;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping(path = "/articulo")
 public class ArticuloControlador {
@@ -54,7 +56,7 @@ public class ArticuloControlador {
 	@PostMapping("/stock")
 	public Articulo nuevoCliente(@RequestBody Stock stock) {
 		Articulo articulo = new Articulo();
-		articulo = articuloServicio.disStock(stock.getArticulo().getArticulo_id(), stock.getCantidad());
+		articulo = articuloServicio.disStock(stock.getArticuloId(), stock.getCantidad());
 		if ( articulo != null) {
 			return articulo;
 		} else {

@@ -1,29 +1,32 @@
 package com.altiora.modelos;
 
-import com.altiora.entidades.Articulo;
-
 public class Stock {
 	
-	private Articulo articulo;
+	private int articuloId;
 	private int cantidad;
 	
-	public Articulo getArticulo() {
-		return articulo;
+	public int getArticuloId() {
+		return articuloId;
 	}
-	public void setArticulo(Articulo articulo) {
-		this.articulo = articulo;
+
+	public void setArticuloId(int articuloId) {
+		this.articuloId = articuloId;
 	}
+
 	public int getCantidad() {
 		return cantidad;
 	}
+
 	public void setCantidad(int cantidad) {
 		this.cantidad = cantidad;
 	}
-	public Stock(Articulo articulo, int cantidad) {
+
+	public Stock(int articuloId, int cantidad) {
 		super();
-		this.articulo = articulo;
+		this.articuloId = articuloId;
 		this.cantidad = cantidad;
 	}
+
 	public Stock() {
 		super();
 	}
