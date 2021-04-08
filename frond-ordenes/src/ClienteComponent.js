@@ -18,8 +18,11 @@ class ClienteComponent extends Component {
     constructor(props){
         super(props)
         this.state = {
+            cantidad:0,
             clientes:[],
-            ordenDetalle:[],
+            ordenDetalles:[],
+            articulo:[],
+            articulos:[],
             modalActualizar: false,
             modalInsertar: false,
             modalOrdenes: false,
@@ -29,9 +32,9 @@ class ClienteComponent extends Component {
             apellido: "",
             },    
             formOrden: [{
-                orden_detalle_id: "",
+                ordenDetalleId: "",
                 orden: {
-                    orden_id: "",
+                    ordenId: "",
                     fecha: "",
                     cliente: {
                         nombre: "",
@@ -40,18 +43,26 @@ class ClienteComponent extends Component {
                     }
                 },
                 articulo: {
-                    articulo_id: "",
+                    articuloId: "",
                     codigo: "",
                     nombre: "",
-                    precio_unitario: ""
+                    precioUnitario: "",
+                    stock: "",
                 }
-            }],    
+            }],
+            formArticulo: [{
+                articuloId: "",
+                codigo: "",
+                nombre: "",
+                precioUnitario: "",
+                stock: "",
+            }],  
         }
     }
 
-    mostrarModalOrdenes = (clienteId) => {
-        this.setState({
-        formOrden: this.state.ordenDetalle,
+    mostrarModalOrdenes = (ordenDetalles) => {
+        this.setState({ 
+            ordenDetalles: ordenDetalles,
           modalOrdenes: true,
         });
       };
@@ -81,15 +92,58 @@ class ClienteComponent extends Component {
     this.setState({ modalInsertar: false });
     };
 
+    mostrarModalArticuloStock = (articulo) => {
+        this.cerrarModalArticulo()
+        this.setState({
+          formArticulo: articulo,
+          modalArticuloStock: true,
+        });
+      };
+
+    cerrarModalArticuloStock = () => {
+        this.setState({ modalArticuloStock: false });
+    };
+
+    mostrarModalArticulo = (articulos) => {
+        this.setState({
+          articulos: articulos,
+          modalArticulo: true,
+        });
+      };
+
+    cerrarModalArticulo = () => {
+        this.setState({ modalArticulo: false });
+    };
+
+    consumoStock = (articuloId) => {
+        ClienteService.consumoStockArticulo(articuloId, this.state.cantidad).then((response) => {
+            this.setState({ articulo: response.data})
+        });
+        this.setState({ modalArticuloStock: false });
+        ClienteService.getArticulos().then((response) => {
+            this.setState({ articulos: response.data,modalArticulo: true})
+        });
+    };
+
     componentDidMount(){
         ClienteService.getClientes().then((response) => {
             this.setState({ clientes: response.data})
         });
 
         ClienteService.getOrdenesDetalle().then((response) => {
-            this.setState({ ordenDetalle: response.data})
+            this.setState({ ordenDetalles: response.data})
+        });
+
+        ClienteService.getArticulos().then((response) => {
+            this.setState({ articulos: response.data})
         });
     }
+
+    handleChangeUno = (e) => {
+        this.setState({
+          cantidad: e.target.value,
+        });
+      };
 
     render (){
         return (
@@ -98,6 +152,7 @@ class ClienteComponent extends Component {
             <Container>
             <br />
             <h1 className = "text-center"> Lista clientes</h1>
+            <Button color="warning" onClick={()=>this.mostrarModalArticulo(this.state.articulos)}>Inventario articulos</Button>{" "}
               <Button color="success" onClick={()=>this.mostrarModalInsertar()}>Crear cliente</Button>
               <br />
               <br />
@@ -120,12 +175,12 @@ class ClienteComponent extends Component {
                         <td>
                             <Button 
                             color="warning" 
-                            onClick={() => this.mostrarModalOrdenes()}
+                            onClick={() => this.mostrarModalOrdenes(this.state.ordenDetalles)}
                             >Ordenes</Button></td>
                         <td>
                             <Button
                             color="primary"
-                            onClick={() => this.mostrarModalActualizar(cliente)}
+                            onClick={() => this.mostrarModalActualizar(cliente,this.state.clientes)}
                             >Editar</Button>{" "}
                             <Button color="danger" >Eliminar</Button>
                         </td>
@@ -275,10 +330,11 @@ class ClienteComponent extends Component {
                     </thead>
         
                     <tbody>
-                    {this.state.ordenDetalle.map(
+                    {this.state.ordenDetalles.map(
                         orden => 
                         <tr key = {orden.orden_detalle_id}>
                             <td> {orden.orden.fecha}</td>   
+                            <td> {orden.orden.cliente.nombre}</td>   
                             <td> {orden.articulo.nombre}</td>
                             <td> {orden.articulo.precio_unitario}</td>
                             <td>
@@ -306,7 +362,154 @@ class ClienteComponent extends Component {
                     Cancelar
                     </Button>
                 </ModalFooter>
-            </Modal>  
+            </Modal> 
+
+            <Modal isOpen={this.state.modalArticuloStock}>
+                <ModalHeader>
+                <div><h3>Consumo en Stock de articulo</h3></div>
+                </ModalHeader>
+
+                <ModalBody>
+                    <FormGroup>
+                    <label>
+                    Id:
+                    </label>
+                    
+                    <input
+                        className="form-control"
+                        readOnly
+                        type="text"
+                        value={this.state.formArticulo.articulo_id}
+                    />
+                    </FormGroup>
+                    
+                    <FormGroup>
+                    <label>
+                        Codigo: 
+                    </label>
+                    <input
+                        className="form-control"
+                        readOnly
+                        type="text"
+                        value={this.state.formArticulo.codigo}
+                    />
+                    </FormGroup>
+                    
+                    <FormGroup>
+                    <label>
+                        Nombre: 
+                    </label>
+                    <input
+                        className="form-control"
+                        readOnly
+                        type="text"
+                        value={this.state.formArticulo.nombre}
+                    />
+                    </FormGroup>
+                    <FormGroup>
+                    <label>
+                        Precio: 
+                    </label>
+                    <input
+                        className="form-control"
+                        readOnly
+                        type="text"
+                        value={this.state.formArticulo.precio_unitario}
+                    />
+                    </FormGroup>
+                    <FormGroup>
+                    <label>
+                        Stock: 
+                    </label>
+                    <input
+                        className="form-control"
+                        readOnly
+                        type="text"
+                        value={this.state.formArticulo.stock}
+                    />
+                    </FormGroup>
+                    <FormGroup>
+                        <label>
+                            Cantidad a descontar: 
+                        </label>
+                        <input
+                            className="form-control"
+                            name="cantidad"
+                            type="number"
+                            onChange={this.handleChangeUno}
+                        />
+                        </FormGroup>
+                </ModalBody>
+
+                <ModalFooter>
+                    <Button
+                    color="primary"
+                    onClick={() => this.consumoStock(this.state.formArticulo.articulo_id)}
+                    >
+                    Consumir
+                    </Button>
+                    <Button
+                    color="danger"
+                    onClick={() => this.cerrarModalArticuloStock()}
+                    >
+                    Cancelar
+                    </Button>
+                </ModalFooter>
+            </Modal>
+
+            <Modal isOpen={this.state.modalArticulo}>
+                <ModalHeader>
+                <div><h3>Articulos</h3></div>
+                </ModalHeader>
+
+                <ModalBody>
+                    <Container>
+                    <br />
+                    <Button color="success" >Agregar articulo</Button>
+                    <br />
+                    <br />
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <td> Codigo</td>
+                            <td> Nombre</td>
+                            <td> Precio Unitario</td>
+                            <td> cantidad</td>
+                        </tr>
+                        </thead>
+            
+                        <tbody>
+                        {this.state.articulos.map(
+                            articulo => 
+                            <tr key = {articulo.articulo_id}>
+                                <td> {articulo.codigo}</td>   
+                                <td> {articulo.nombre}</td>
+                                <td> {articulo.precio_unitario}</td>
+                                <td> {articulo.stock}</td>
+                                <td>
+                                    <Button
+                                    color="primary"
+                                    onClick={() => this.mostrarModalArticuloStock(articulo)}
+                                    >Consumir</Button>{" "}
+                                    <Button color="danger" >Eliminar</Button>
+                                </td>
+                            </tr>
+                        )}
+                        </tbody>
+                    </table>
+                    </Container>
+                </ModalBody>
+
+                <ModalFooter>
+                    <Button
+                    color="danger"
+                    onClick={() => this.cerrarModalArticulo()}
+                    >
+                    Cancelar
+                    </Button>
+                </ModalFooter>
+            </Modal>
+
         </>
         )
     }

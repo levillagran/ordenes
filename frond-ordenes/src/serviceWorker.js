@@ -17,20 +17,37 @@ const ORDEN_ELIMINAR_URL = 'http://localhost:8087/orden/eliminar';
 const ORDEN_OBTENER_URL = 'http://localhost:8087/orden/obtener';
 const ORDEN_DETALLE_LISTAR_URL = 'http://localhost:8087/ordenDetalle/listar';
 
+const ARTICULO_CONSUMO_STOCK_URL = 'http://localhost:8087/articulo/stock';
 
-class ClienteService {
 
-    getClientes(){
-        return axios.get(CLIENTES_LISTAR_URL);
+class  ClienteService {
+
+    async getClientes(){
+        return await axios.get(CLIENTES_LISTAR_URL);
     }
 
-    getOrdenes(){
-        return axios.get(ORDEN_LISTAR_URL);
+    async getOrdenes(){
+        return await axios.get(ORDEN_LISTAR_URL);
     }
 
-    getOrdenesDetalle(){
-        return axios.get(ORDEN_DETALLE_LISTAR_URL);
+    async getOrdenesDetalle(){
+        return await axios.get(ORDEN_DETALLE_LISTAR_URL);
     }
+
+    async getArticulos(){
+        return await axios.get(ARTICULO_LISTAR_URL);
+    }
+
+    async consumoStockArticulo(articuloId, cantidad){
+
+        const data = {
+            articuloId: articuloId,
+            cantidad: cantidad
+          }
+
+        return await axios.post(ARTICULO_CONSUMO_STOCK_URL, data);
+    }
+    
 }
 
 export default new ClienteService();
